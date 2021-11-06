@@ -1,8 +1,10 @@
 \documentclass{beamer}
-%Information to be included in the title page:
-\title{Sample title}
-\author{Anonymous}
-\institute{Overleaf}
+
+\usepackage{minted}
+
+\title{NixOS and why you should use it}
+\author{Astrid Yu}
+\institute{Cal Poly Linux Users Group}
 \date{2021}
 
 \begin{document}
@@ -10,8 +12,65 @@
 \frame{\titlepage}
 
 \begin{frame}
-\frametitle{Sample frame title}
-This is some text in the first frame. This is some text in the first frame. This is some text in the first frame.
+    \frametitle{Traditional way of managing machines}
+
+    \begin{block}{How to do it}
+        \begin{enumerate}
+            \item \texttt{apt install openssh-server}
+            \item \texttt{vi /etc/ssh/ssh\_config}
+            \item Repeat for each service
+        \end{enumerate}
+    \end{block}
+
+    \pause
+
+    \begin{alertblock}{Pros}
+        \begin{itemize}
+            \item Pretty simple
+            \item Intuitive, uses built-in tools
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+
+    \begin{alertblock}{Cons}
+        \begin{itemize}
+            \item If you need to migrate you lose all your configs
+            \item You'll eventually lose track of what you've modified
+        \end{itemize}
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Using Ansible}
+    \begin{block}{How to do it}
+        \begin{minted}{yaml}
+            foo: bar
+        \end{minted}
+        \begin{enumerate}
+            \item \texttt{apt install openssh-server}
+            \item \texttt{vi /etc/ssh/ssh\_config}
+            \item Repeat for each service
+        \end{enumerate}
+    \end{block}
+
+    \pause
+
+    \begin{alertblock}{Pros}
+        \begin{itemize}
+            \item Pretty simple
+            \item Intuitive, uses built-in tools
+        \end{itemize}
+    \end{alertblock}
+
+    \pause
+
+    \begin{alertblock}{Cons}
+        \begin{itemize}
+            \item If you need to migrate you lose all your configs
+            \item You'll eventually lose track of what you've modified
+        \end{itemize}
+    \end{alertblock}
 \end{frame}
 
 \end{document}
