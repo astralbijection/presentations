@@ -12,17 +12,21 @@
 \frame{\titlepage}
 
 \begin{frame}
-    \frametitle{Traditional way of managing machines}
+    \frametitle{Traditional way: SSH and run commands}
 
     \begin{block}{How to do it}
         \begin{enumerate}
-            \item \texttt{apt install openssh-server}
-            \item \texttt{vi /etc/ssh/ssh\_config}
-            \item Repeat for each service
+            \item SSH into your machine
+            \item \texttt{apt install your-service}
+            \item \texttt{vi /etc/your-service/config.conf}
+            \item \texttt{systemctl enable your-service.service}
+            \item Repeat for each service, repeat for each machine
         \end{enumerate}
     \end{block}
+\end{frame}
 
-    \pause
+\begin{frame}
+    \frametitle{Traditional way: SSH and run commands}
 
     \begin{alertblock}{Pros}
         \begin{itemize}
@@ -41,28 +45,81 @@
     \end{alertblock}
 \end{frame}
 
-\begin{frame}[fragile]
-    \frametitle{Using Ansible}
-    \begin{block}{How to do it}
-        \begin{minted}{yaml}
-            foo: bar
-        \end{minted}
-        \begin{enumerate}
-            \item \texttt{apt install openssh-server}
-            \item \texttt{vi /etc/ssh/ssh\_config}
-            \item Repeat for each service
-        \end{enumerate}
+\begin{frame}
+    \frametitle{Shell scripts in a Git repo}
+    
+    \begin{block}{OwO what's this?}
+        \begin{itemize}
+            \item Think SSH and Bash on steroids
+            \item They have features that help make execution \textbf{idempotent}
+            \item If you run something twice, it only gets applied once
+        \end{itemize}
     \end{block}
+\end{frame}
 
-    \pause
+\begin{frame}[fragile]
+    \frametitle{Example: Ansible}
 
+    Create a config
+    \begin{minted}{cfg}
+# ansible.cfg
+[defaults]
+inventory = inventory.yml
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Example: Ansible}
+
+    Declare your inventory of machines
+    \begin{minted}{cfg}
+# inventory.yml
+all:
+  myhosts:
+    cracktop.p.astrid.tech:
+      ansible_host: 192.168.8.41
+      ansible_user: root
+    thonkpad.p.astrid.tech:
+      ansible_host: 192.168.8.42
+      ansible_user: root
+    badtop.p.astrid.tech:
+      ansible_host: 192.168.8.22
+      ansible_user: astrid
+    ...
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Example: Ansible}
+
+    Create a playbook:
+    \begin{minted}{yaml}
+# playbook.yaml
+- hosts: myhosts # run on every one of myhosts
+  tasks:
+    - apt:  # apt
+        item: 
+          - your-service-1
+          - your-service-2
+          - ...
+        state: present
+    - copy:
+        src: /your/local/copy
+        dest: /etc/your-service/config.conf
+    - systemd:
+        name: your-service-1.service
+        state: started
+        enabled: yes
+        \end{minted}
+\end{frame}
+
+\begin{frame}
     \begin{alertblock}{Pros}
         \begin{itemize}
             \item Pretty simple
             \item Intuitive, uses built-in tools
         \end{itemize}
     \end{alertblock}
-
     \pause
 
     \begin{alertblock}{Cons}
