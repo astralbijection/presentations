@@ -1,0 +1,106 @@
+\documentclass{beamer}
+
+\title{archlinux-2022.01.01-x86\_64.iso Let's Play}
+\author{Astrid Yu}
+\institute{Cal Poly Linux Users Group}
+\date{2022-??-??}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+    \frametitle{Why Arch?}
+    \begin{itemize}
+        \item Rolling release means you have very bleeding-edge packages, all you gotta do is just \texttt{pacman -Sy <package>}
+        \item Even if pacman doesn't have it, AUR probably does!
+        \item You get to learn a lot about the various tools that modern Linux distros run on
+        \item Manual installation process may be hard, but you can do almost anything you can imagine!
+            \begin{itemize}
+                \item \href{https://gist.github.com/motorailgun/cc2c573f253d0893f429a165b5f851ee}{Some person got Arch and Windows installed on the same NTFS partition using Arch to make an extremely cursed computer}
+            \end{itemize} \pause
+        \item You can finally say the magic words: ``I use arch btw''
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{How to install Arch}
+    \Huge
+    \href{https://wiki.archlinux.org/title/Archinstall}{Use archinstall, the built-in installer}
+\end{frame}
+
+\newcommand{\thankyouframe}{
+    \frametitle{Thanks for listening!}
+
+    {\large \textbf{Astrid Yu}}
+
+    Website: \href{https://astrid.tech}{astrid.tech}
+
+    Email: \href{mailto:astrid@astrid.tech}{astrid@astrid.tech}
+    
+    Github: \href{https://github.com/astralbijection}{@astralbijection}
+}
+
+\begin{frame}
+    \thankyouframe \pause
+
+    \centering
+    \huge
+    \textbf{I'm just kidding}
+\end{frame}
+
+\begin{frame}
+    \frametitle{How to \textit{actually} install Arch}
+    Okay, so maybe archinstall makes things too easy.
+    \begin{itemize}
+        \item How do we install it the classical and very manual way?
+        \item How do we get that sense of pride and accomplishment that comes with manually getting it to work?
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Download Arch}
+
+    \large
+
+    \url{https://archlinux.org/download/}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Flash Arch onto a USB}
+
+    \begin{block}{Mac and Linux users}
+        \begin{enumerate}
+            \item Use lsblk to list disks and find the USB you want to flash onto
+            \item \texttt{sudo dd bs=16M if=<your arch iso> of=<the USB you want> status=progress}
+        \end{enumerate}
+
+        \textbf{WARNING!} If you type in the wrong thing for \textit{of=}, you \textit{will destroy your disk.} It's called dd (disk destroyer) for a reason!\footnote{It's not actually called disk destroyer, but the memes all say it is.}
+    \end{block}
+
+    \begin{block}{Windows users}
+        Rufus (found at \url{https://rufus.ie/en/}) is one of the better disk imagers I know of.
+\end{block}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Boot into Arch on your target computer}
+
+    \begin{enumerate}
+        \item Stick the USB into your computer
+        \item Boot into the USB (may need BIOS)
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \Huge
+    \centering
+
+    Thankfully, I've gone through all these steps to this VM!
+\end{frame}
+
+\begin{frame}
+    \frametitle{Disk formatting}
+\end{frame}
+
+\end{document}
