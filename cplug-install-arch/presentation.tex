@@ -44,6 +44,8 @@
     
     {\Huge \textbf{Any questions?}}
 
+    {\small The source code for this presentation is located at \url{https://github.com/astralbijection/presentations/tree/main/cplug-install-arch}}
+
     \vspace{1cm}
 
     {\large \textbf{Astrid Yu}}
@@ -149,6 +151,8 @@
 
 \begin{frame}{Formatting our filesystems}
     Use \texttt{mkfs.ext4} and \texttt{mkfs.vfat}
+
+    \texttt{e2label /dev/sda2 arch\_os}
 \end{frame}
 
 \begin{frame}{Mounting our filesystems}
@@ -174,7 +178,7 @@
 \end{frame}
 
 \begin{frame}{Run pacstrap}
-    \texttt{pacstrap /mnt base linux linux-firmware e2fsprogs dosfstools bash neovim iproute2 networkmanager systemd-boot efibootmgr}
+    \texttt{pacstrap /mnt base linux linux-firmware e2fsprogs dosfstools bash neovim iproute2 networkmanager systemd efibootmgr}
 
     \begin{alertblock}{Note}
         Not all of these things are mandatory. \texttt{neovim} and everything after it can potentially be swapped out for others.
