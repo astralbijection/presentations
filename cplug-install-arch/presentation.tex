@@ -1,16 +1,27 @@
 \documentclass{beamer}
 
+\usepackage{verbatim}
+
+\usetheme{AnnArbor}
+
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{Table of Contents}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
 \title{archlinux-2022.01.01-x86\_64.iso Let's Play}
 \author{Astrid Yu}
 \institute{Cal Poly Linux Users Group}
-\date{2022-??-??}
+\date{2022-01-09}
 
 \begin{document}
 
 \frame{\titlepage}
 
-\begin{frame}
-    \frametitle{Why Arch?}
+\begin{frame}{Why Arch?}
     \begin{itemize}
         \item Rolling release means you have very bleeding-edge packages, all you gotta do is just \texttt{pacman -Sy <package>}
         \item Even if pacman doesn't have it, AUR probably does!
@@ -23,14 +34,17 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}
-    \frametitle{How to install Arch}
+\begin{frame}{How to install Arch}
     \Huge
     \href{https://wiki.archlinux.org/title/Archinstall}{Use archinstall, the built-in installer}
 \end{frame}
 
 \newcommand{\thankyouframe}{
     \frametitle{Thanks for listening!}
+    
+    {\Huge \textbf{Any questions?}}
+
+    \vspace{1cm}
 
     {\large \textbf{Astrid Yu}}
 
@@ -49,8 +63,7 @@
     \textbf{I'm just kidding}
 \end{frame}
 
-\begin{frame}
-    \frametitle{How to \textit{actually} install Arch}
+\begin{frame}{How to install Arch \textit{without a guided installer}}
     Okay, so maybe archinstall makes things too easy.
     \begin{itemize}
         \item How do we install it the classical and very manual way?
@@ -58,16 +71,27 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Download Arch}
+\begin{frame}{Outline of talk}
+    \tableofcontents
+\end{frame}
 
+\begin{frame}{Following along from home}
+    \begin{itemize}
+        \item I may \textit{look} like a gigachad supergenius doing this quickly, but I've done it before
+        \item Follow this guide from the Arch Linux wiki: \url{https://wiki.archlinux.org/title/installation_guide}
+        \item I'm doing this in a VM, which is kind of an idealized environment. Your hardware may be harder to set up!
+    \end{itemize}
+\end{frame}
+
+\section{Making your Live USB}
+
+\begin{frame}{Download Arch}
     \large
 
     \url{https://archlinux.org/download/}
 \end{frame}
 
-\begin{frame}
-    \frametitle{Flash Arch onto a USB}
+\begin{frame}{Flash Arch onto a USB}
 
     \begin{block}{Mac and Linux users}
         \begin{enumerate}
@@ -99,8 +123,125 @@
     Thankfully, I've gone through all these steps to this VM!
 \end{frame}
 
+\section{Setting up your disks}
+
+\begin{frame}{Why?}
+    
+    \begin{itemize}
+        \item Files are a big fat lie
+        \item On disk, everything is arrangements of bits
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Planning our disk}
+
+    We want the following partitions:
+    \begin{itemize}
+        \item an \textbf{EFI} partition to install our bootloader in (FAT, 550MB)
+        \item a \textbf{/ (root)} partition to install our system in (ext4, 20GB)
+        \item a \textbf{/home} partition to store user files in (ext4, 30GB)
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Making partition tables}
+    Use \texttt{fdisk}
+\end{frame}
+
+\begin{frame}{Formatting our filesystems}
+    Use \texttt{mkfs.ext4} and \texttt{mkfs.vfat}
+\end{frame}
+
+\begin{frame}{Mounting our filesystems}
+    Use the \texttt{mount} command to mount root:
+
+    \texttt{mount /dev/sda2 /mnt}
+
+    Then, mount additional partitions
+    \begin{enumerate}
+        \item \texttt{mkdir -p /mnt/boot /mnt/home}
+        \item \texttt{mount /dev/sda1 /mnt/boot}
+        \item \texttt{mount /dev/sda3 /mnt/home}
+    \end{enumerate}
+\end{frame}
+
+\section{Installing the system and chrooting}
+
+\begin{frame}{Why?}
+    \begin{itemize}
+        \item You literally need to do this in order to have an Arch system
+        \item \texttt{chroot} means ``change root''; you do this to treat a different filesystem as your root so \texttt{pacman -S} goes onto the system you're installing, even if you're technically in the live USB
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Run pacstrap}
+    \texttt{pacstrap /mnt base linux linux-firmware e2fsprogs dosfstools bash neovim iproute2 networkmanager systemd-boot efibootmgr}
+
+    \begin{alertblock}{Note}
+        Not all of these things are mandatory. \texttt{neovim} and everything after it can potentially be swapped out for others.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Make your fstab}
+    \texttt{genfstab -U /mnt >> /mnt/etc/fstab}
+\end{frame}
+
+\begin{frame}{\texttt{chroot} into your mounted disk}
+    \texttt{arch-chroot /mnt}
+\end{frame}
+
+\begin{frame}{Random system stuff}
+    \begin{itemize}
+        \item \texttt{ln -sf /usr/share/zoneinfo/US/Pacific /etc/localtime}
+        \item \texttt{hwclock --systohc}
+        \item \texttt{echo archlinux-lets-play > /etc/hostname}
+        \item \texttt{passwd}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Locales}
+    \begin{itemize}
+        \item \texttt{locale-gen}
+        \item \texttt{echo LANG=en\_US.UTF-8 > /etc/locale.conf}
+        \item \texttt{echo KEYMAP=us > /etc/vconsole.conf}
+    \end{itemize}
+\end{frame}
+
+\section{Installing your bootloader}
+
+\begin{frame}{Why?}
+    Without a bootloader, you can't boot into Arch, defeating the whole purpose of all of this
+\end{frame}
+
+\begin{frame}[fragile]{Install systemd-boot}
+    Run \texttt{bootctl install}
+
+    \begin{exampleblock}{\texttt{/boot/loader/loader.conf}}
+        \begin{verbatim}
+default  arch.conf
+timeout  4
+console-mode max
+editor   no\end{verbatim}
+    \end{exampleblock}
+
+    \begin{exampleblock}{\texttt{/boot/loader/entries/arch.conf}}
+        \begin{verbatim}
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
+options root="LABEL=arch_os" rw\end{verbatim}
+    \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Final Notes}
+\begin{itemize}
+    \item Remember that this is on a VM! It might be harder on your hardware! \pause
+    \item Don't just follow this presentation, read the Arch wiki too! \url{https://wiki.archlinux.org/title/installation_guide} \pause
+    \item Wanna do more than just have a TTY? Read the Arch wiki, it will show you how to install KDE and other stuff! \pause
+\end{itemize}
+\end{frame}
+
 \begin{frame}
-    \frametitle{Disk formatting}
+    \thankyouframe
 \end{frame}
 
 \end{document}
