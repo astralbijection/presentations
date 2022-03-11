@@ -1,0 +1,112 @@
+\documentclass{beamer}
+
+\usepackage{outlines}
+
+\usetheme{Singapore}
+
+\AtBeginSection[]
+{
+    \begin{frame}
+        \frametitle{Table of Contents}
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+\title{Implementing TULI5 in Elixir}
+\author{Astrid Yu}
+\institute{CSC 430}
+\date{2022-03-11}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}{Elixir in a nutshell}
+    \begin{columns}[T]
+    \begin{column}{.48\textwidth}
+        \begin{outline}
+            \1 Functional, dynamically-typed, general-purpose language. A lot like untyped Racket.
+            \1 Released in 2012
+            \1 Comes with a REPL (\texttt{iex})
+            \1 Lots of interop with Erlang
+                \2 It's made in Erlang
+                \2 Compiles to Erlang VM bytecode
+        \end{outline}
+    \end{column}
+    \begin{column}{.48\textwidth}
+        \centering
+        \includegraphics[width=0.8\linewidth]{./elixir.png}
+    \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{StackOverflow Survey 2021}
+    \begin{outline}
+        \1 Elixir pays the \textbf{3rd} most! (\$80,077) Tied with Erlang, likely because of how connected they are
+        \1 However, it is the \textbf{30th} most used language
+        \1 It is the \textbf{4th} most loved language (72\% love vs 28\% dread)
+    \end{outline}
+    These statistics seem similar to lots of other functional programming languages
+\end{frame}
+
+\begin{frame}{Language features}
+    \begin{outline}
+        \1 Standard stuff: numbers, strings, variables, closures, tuples...
+        \1 Everything is an expression
+        \1 Can be compiled (.ex) OR interpreted (.exs)
+        \1 Maps (basically dictionaries)
+    \end{outline}
+\end{frame}
+
+\begin{frame}{Probably stolen from Lisp}
+    \begin{outline}
+        \1 ``Atoms,'' which are just symbols by another name
+            \2 Elixir's \texttt{:abc} is Racket's \texttt{'abc}
+        \1 Linked lists
+        \1 AST-based macros, along with a certain \texttt{quote/1} and \texttt{unquote/1}
+    \end{outline}
+\end{frame}
+
+\begin{frame}{Constructing TULI in Elixir}
+    \texttt{[:fn, [:x], [:+, [:-, :x, 9], 10]]}
+\end{frame}
+
+\begin{frame}{What I've made}
+    \begin{outline}
+        \1 A working interpreter and parser
+        \1 I didn't bother to make most of the builtin environment
+        \1 Unknown how well it deals with edge cases, but oh well
+    \end{outline}
+\end{frame}
+
+\begin{frame}
+    \Huge
+    \centering
+    Demo
+\end{frame}
+
+\begin{frame}{Would I take a job writing Elixir?}
+    \begin{outline}
+        \1 Maybe, it seems kinda interesting
+        \1 It does seem to have nice tooling
+        \1 But also, I don't really like dynamically typed languages
+    \end{outline}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Thanks for listening!}
+    
+    {\Huge \textbf{Any questions?}}
+
+    \vspace{1cm}
+
+    {\large \textbf{Astrid Yu}}
+
+    Website: \href{https://astrid.tech}{astrid.tech}
+
+    Email: \href{mailto:astrid@astrid.tech}{astrid@astrid.tech}
+    
+    Github: \href{https://github.com/astralbijection}{@astralbijection}
+\end{frame}
+
+\end{document}
